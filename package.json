@@ -1,0 +1,34 @@
+{
+	"name": "fgs",
+	"version": "0.0.0",
+	"bin": {
+		"fgs": "bin/fgs.js"
+	},
+	"scripts": {
+		"build": "esbuild cli.ts --format=cjs --platform=node --target=node12 --outfile=bin/fgs.js",
+		"format": "prettier  --write --list-different \"{*,example/**/*,.github/**/*}.+(ts|json|yml|md)\"",
+		"prepublishOnly": "pnpm run build",
+		"typecheck": "tsc --noEmit",
+		"watch": "pnpm run build -- --watch"
+	},
+	"dependencies": {
+		"diary": "^0.0.12",
+		"graphql-config": "^3.2.0",
+		"httpie": "^1.1.2",
+		"kleur": "^4.1.4",
+		"mri": "^1.1.6"
+	},
+	"devDependencies": {
+		"@marais/tsconfig": "^0.0.1",
+		"esbuild": "^0.11.14",
+		"graphql": "^15.5.0",
+		"prettier": "^2.2.1",
+		"typescript": "^4.2.4"
+	},
+	"peerDependencies": {
+		"graphql": ">= 15"
+	},
+	"volta": {
+		"node": "16.0.0"
+	}
+}
