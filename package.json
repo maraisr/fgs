@@ -1,9 +1,12 @@
 {
 	"name": "fgs",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"bin": {
 		"fgs": "bin/fgs.js"
 	},
+	"files": [
+		"bin"
+	],
 	"scripts": {
 		"build": "esbuild cli.ts --format=cjs --platform=node --target=node12 --outfile=bin/fgs.js",
 		"format": "prettier  --write --list-different \"{*,example/**/*,.github/**/*}.+(ts|json|yml|md)\"",
