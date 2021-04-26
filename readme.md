@@ -1,6 +1,6 @@
-# `fgs` <sup>**F**etch **G**raphQL **S**chema</sup> [![CI](https://github.com/maraisr/fgs/actions/workflows/ci.yml/badge.svg)](https://github.com/maraisr/fgs/actions/workflows/ci.yml)
+# `fgs` [![CI](https://github.com/maraisr/fgs/actions/workflows/ci.yml/badge.svg)](https://github.com/maraisr/fgs/actions/workflows/ci.yml)
 
-> A small utility cli to perform an introspection query against a [graphql-config](https://graphql-config.com/) configuration.
+> `fgs` _or_ **F**etch **G**raphQL **S**chema is a small utility cli to perform an introspection query against a [graphql-config](https://graphql-config.com/) configuration.
 
 ---
 
