@@ -2,6 +2,14 @@
 
 > A small utility cli to perform an introspection query against a [graphql-config](https://graphql-config.com/) configuration.
 
+---
+
+<p align="center"><strong>WORK IN PROGRESS</strong></p>
+
+<p align="center"><strong>Status:</strong> Functional, but incomplete.</p>
+
+---
+
 ## 💡 Features
 
 -   Fast
