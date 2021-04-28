@@ -34,6 +34,14 @@ const introspection_query = getIntrospectionQuery();
 
 const schema_cache = new Map<string, GraphQLSchema>();
 
+// TODO: https://github.com/graphql/graphql-spec/issues/861
+const introspection_cleaner = (key, value) => {
+	if (key === "description" && value === "") {
+		return undefined;
+	}
+	return value;
+};
+
 async function get_schema(endpoint: Endpoint) {
 	const maybe_schema = schema_cache.get(endpoint.url);
 	if (maybe_schema) {
@@ -49,14 +57,13 @@ async function get_schema(endpoint: Endpoint) {
 			operationName: "IntrospectionQuery",
 			query: introspection_query,
 		}),
+		reviver: introspection_cleaner,
 	});
 
-	// @ts-ignore
-	data = JSON.parse(data);
+	if (typeof data === "string")
+		data = JSON.parse(data, introspection_cleaner);
 
-	const schema = buildClientSchema(data.data, {
-		assumeValid: true,
-	});
+	const schema = buildClientSchema(data.data);
 
 	schema_cache.set(endpoint.url, schema);
 
@@ -91,6 +98,7 @@ async function run(options: { endpoint: string }) {
 		const endpoint = endpoints[options.endpoint];
 
 		const schema = await get_schema(endpoint);
+		console.log("Processed [%s] schema %s", project.name, endpoint.url);
 
 		const schema_text = `# Endpoint: ${
 			endpoint.url
