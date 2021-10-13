@@ -1,17 +1,14 @@
 import { diary } from "diary";
-import { mkdir, writeFile } from "fs/promises";
 import {
 	buildClientSchema,
 	getIntrospectionQuery,
-	GraphQLSchema,
 	printSchema,
 } from "graphql";
 import { loadConfig } from "graphql-config";
 import { post } from "httpie";
 import { cyan, magenta } from "kleur/colors";
-// @ts-ignore
 import mri from "mri";
-import { dirname } from "path";
+import {writeFile} from 'swrt';
 
 interface Endpoint {
 	url: string;
@@ -20,19 +17,19 @@ interface Endpoint {
 
 const { log } = diary("fgs");
 
-const cli_opts = mri(process.argv.slice(2), {
+const cli_opts = mri<{endpoint: string, json: boolean}>(process.argv.slice(2), {
 	default: {
 		endpoint: "next",
+		json: false
 	},
 	string: ["endpoint"],
+	boolean: ["json"],
 	alias: {
 		endpoint: ["e"],
 	},
 });
 
 const introspection_query = getIntrospectionQuery();
-
-const schema_cache = new Map<string, GraphQLSchema>();
 
 // TODO: https://github.com/graphql/graphql-spec/issues/861
 const introspection_cleaner = (key, value) => {
@@ -42,13 +39,7 @@ const introspection_cleaner = (key, value) => {
 	return value;
 };
 
-async function get_schema(endpoint: Endpoint) {
-	const maybe_schema = schema_cache.get(endpoint.url);
-	if (maybe_schema) {
-		log("reusing schema for %s", endpoint.url);
-		return maybe_schema;
-	}
-
+async function get_schema_payload(endpoint: Endpoint) {
 	log("fetching schema from %s", endpoint.url);
 
 	let { data } = await post(endpoint.url, {
@@ -63,14 +54,10 @@ async function get_schema(endpoint: Endpoint) {
 	if (typeof data === "string")
 		data = JSON.parse(data, introspection_cleaner);
 
-	const schema = buildClientSchema(data.data);
-
-	schema_cache.set(endpoint.url, schema);
-
-	return schema;
+	return data?.data;
 }
 
-async function run(options: { endpoint: string }) {
+async function run(options: typeof cli_opts) {
 	log("starting with config %j", options);
 	const config = await loadConfig({});
 
@@ -97,15 +84,21 @@ async function run(options: { endpoint: string }) {
 
 		const endpoint = endpoints[options.endpoint];
 
-		const schema = await get_schema(endpoint);
+		const schema_payload = await get_schema_payload(endpoint);
+
+		if (options.json) {
+			await writeFile(`${project.schema}.json`, JSON.stringify(schema_payload, null, 4), "utf8");	
+		} else {
+			const schema = buildClientSchema(schema_payload);
+
+			const schema_text = `# Endpoint: ${
+				endpoint.url
+			}\n# Fetched at ${new Date().toISOString()}\n\n${printSchema(schema)}`;
+
+			await writeFile(project.schema as string, schema_text, "utf8");
+		}
+
 		console.log("Processed [%s] schema %s", project.name, endpoint.url);
-
-		const schema_text = `# Endpoint: ${
-			endpoint.url
-		}\n# Fetched at ${new Date().toISOString()}\n\n${printSchema(schema)}`;
-
-		await mkdir(dirname(project.schema as string), { recursive: true });
-		await writeFile(project.schema as string, schema_text, "utf8");
 	}
 }
 
