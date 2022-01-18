@@ -8,7 +8,7 @@ import { loadConfig } from "graphql-config";
 import { post } from "httpie";
 import { cyan, magenta } from "kleur/colors";
 import mri from "mri";
-import {writeFile} from 'swrt';
+import { writeFile } from 'swrt';
 
 interface Endpoint {
 	url: string;
@@ -17,7 +17,7 @@ interface Endpoint {
 
 const { log } = diary("fgs");
 
-const cli_opts = mri<{endpoint: string, json: boolean}>(process.argv.slice(2), {
+const cli_opts = mri<{ endpoint: string, json: boolean }>(process.argv.slice(2), {
 	default: {
 		endpoint: "next",
 		json: false
@@ -31,14 +31,6 @@ const cli_opts = mri<{endpoint: string, json: boolean}>(process.argv.slice(2), {
 
 const introspection_query = getIntrospectionQuery();
 
-// TODO: https://github.com/graphql/graphql-spec/issues/861
-const introspection_cleaner = (key, value) => {
-	if (key === "description" && value === "") {
-		return undefined;
-	}
-	return value;
-};
-
 async function get_schema_payload(endpoint: Endpoint) {
 	log("fetching schema from %s", endpoint.url);
 
@@ -48,11 +40,10 @@ async function get_schema_payload(endpoint: Endpoint) {
 			operationName: "IntrospectionQuery",
 			query: introspection_query,
 		}),
-		reviver: introspection_cleaner,
 	});
 
 	if (typeof data === "string")
-		data = JSON.parse(data, introspection_cleaner);
+		data = JSON.parse(data);
 
 	return data?.data;
 }
@@ -60,6 +51,10 @@ async function get_schema_payload(endpoint: Endpoint) {
 async function run(options: typeof cli_opts) {
 	log("starting with config %j", options);
 	const config = await loadConfig({});
+
+	if (!config) {
+		throw new Error('config not discovered');
+	}
 
 	log("config discovered at %s", config.filepath);
 
@@ -87,13 +82,12 @@ async function run(options: typeof cli_opts) {
 		const schema_payload = await get_schema_payload(endpoint);
 
 		if (options.json) {
-			await writeFile(`${project.schema}.json`, JSON.stringify(schema_payload, null, 4), "utf8");	
+			await writeFile(`${project.schema}.json`, JSON.stringify(schema_payload, null, 4), "utf8");
 		} else {
 			const schema = buildClientSchema(schema_payload);
 
-			const schema_text = `# Endpoint: ${
-				endpoint.url
-			}\n# Fetched at ${new Date().toISOString()}\n\n${printSchema(schema)}`;
+			const schema_text = `# Endpoint: ${endpoint.url
+				}\n# Fetched at ${new Date().toISOString()}\n\n${printSchema(schema)}`;
 
 			await writeFile(project.schema as string, schema_text, "utf8");
 		}
