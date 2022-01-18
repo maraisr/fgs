@@ -1,102 +1,19 @@
-import { diary } from "diary";
-import {
-	buildClientSchema,
-	getIntrospectionQuery,
-	printSchema,
-} from "graphql";
-import { loadConfig } from "graphql-config";
-import { post } from "httpie";
-import { cyan, magenta } from "kleur/colors";
-import mri from "mri";
-import { writeFile } from 'swrt';
+import sade from 'sade';
 
-interface Endpoint {
-	url: string;
-	headers: Record<string, string>;
-}
+import defineRelay from './src/relay'
+import defineSchema from './src/schema';
 
-const { log } = diary("fgs");
+const prog = sade('fgs');
 
-const cli_opts = mri<{ endpoint: string, json: boolean }>(process.argv.slice(2), {
-	default: {
-		endpoint: "next",
-		json: false
-	},
-	string: ["endpoint"],
-	boolean: ["json"],
-	alias: {
-		endpoint: ["e"],
-	},
-});
+defineSchema(prog);
+defineRelay(prog);
 
-const introspection_query = getIntrospectionQuery();
+const result = prog.parse(process.argv);
 
-async function get_schema_payload(endpoint: Endpoint) {
-	log("fetching schema from %s", endpoint.url);
-
-	let { data } = await post(endpoint.url, {
-		headers: endpoint.headers,
-		body: JSON.stringify({
-			operationName: "IntrospectionQuery",
-			query: introspection_query,
-		}),
+// @ts-expect-error
+if (result && 'then' in result)
+	// @ts-expect-error
+	result.catch((e) => {
+		console.error(e);
+		process.exit(1);
 	});
-
-	if (typeof data === "string")
-		data = JSON.parse(data);
-
-	return data?.data;
-}
-
-async function run(options: typeof cli_opts) {
-	log("starting with config %j", options);
-	const config = await loadConfig({});
-
-	if (!config) {
-		throw new Error('config not discovered');
-	}
-
-	log("config discovered at %s", config.filepath);
-
-	for (const [, project] of Object.entries(config.projects)) {
-		log("processing project %s", project.name);
-		if (!project.hasExtension("endpoints"))
-			throw new Error(
-				`Project ${cyan(project.name)} could not find ${magenta(
-					`endpoints`
-				)} extension.`
-			);
-
-		const endpoints = project.extension<Record<string, Endpoint>>(
-			"endpoints"
-		);
-		if (!(options.endpoint in endpoints))
-			throw new Error(
-				`Project ${cyan(project.name)} does not have ${magenta(
-					options.endpoint
-				)} endpoint.`
-			);
-
-		const endpoint = endpoints[options.endpoint];
-
-		const schema_payload = await get_schema_payload(endpoint);
-
-		if (options.json) {
-			await writeFile(`${project.schema}.json`, JSON.stringify(schema_payload, null, 4), "utf8");
-		} else {
-			const schema = buildClientSchema(schema_payload);
-
-			const schema_text = `# Endpoint: ${endpoint.url
-				}\n# Fetched at ${new Date().toISOString()}\n\n${printSchema(schema)}`;
-
-			await writeFile(project.schema as string, schema_text, "utf8");
-		}
-
-		console.log("Processed [%s] schema %s", project.name, endpoint.url);
-	}
-}
-
-run(cli_opts).catch((e) => {
-	console.error(e);
-	process.exit(1);
-});

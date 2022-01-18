@@ -2,23 +2,25 @@ lockfileVersion: 5.3
 
 specifiers:
   '@marais/tsconfig': ^0.0.2
-  diary: ^0.3.0
   esbuild: ^0.14.11
+  globby: 11.1.0
   graphql: ^16.2.0
   graphql-config: ^4.1.0
   httpie: ^1.1.2
   kleur: ^4.1.4
-  mri: ^1.2.0
+  klona: ^2.0.5
   prettier: ^2.5.1
+  sade: ^1.8.1
   swrt: ^0.0.6
   typescript: ^4.5.4
 
 dependencies:
-  diary: 0.3.0
+  globby: 11.1.0
   graphql-config: 4.1.0_graphql@16.2.0+typescript@4.5.4
   httpie: 1.1.2
   kleur: 4.1.4
-  mri: 1.2.0
+  klona: 2.0.5
+  sade: 1.8.1
   swrt: 0.0.6
 
 devDependencies:
@@ -397,10 +399,6 @@ packages:
 
   /dataloader/2.0.0:
     resolution: {integrity: sha512-YzhyDAwA4TaQIhM5go+vCLmU0UikghC/t9DTQYZR2M/UvZ1MdOhPezSDZcjj9uqQJOMqjLcpWtyW2iNINdlatQ==}
-    dev: false
-
-  /diary/0.3.0:
-    resolution: {integrity: sha512-Z4HGQ6c7/g/nHlUUO6/PfH/ukOa79Lp2yWrAbN2qfWfCSwSh/30/VHR1InqV8UvvTfxgp9AjgQRTSYiNkyaVSg==}
     dev: false
 
   /diff/4.0.2:
@@ -791,6 +789,11 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
+  /klona/2.0.5:
+    resolution: {integrity: sha512-pJiBpiXMbt7dkzXe8Ghj/u4FfXOOa98fPW+bihOJ4SjnoijweJrNThJfd3ifXpXhREjpoF2mZVH1GfS9LV3kHQ==}
+    engines: {node: '>= 8'}
+    dev: false
+
   /lines-and-columns/1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: false
@@ -928,6 +931,13 @@ packages:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
       queue-microtask: 1.2.3
+    dev: false
+
+  /sade/1.8.1:
+    resolution: {integrity: sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==}
+    engines: {node: '>=6'}
+    dependencies:
+      mri: 1.2.0
     dev: false
 
   /slash/3.0.0:
