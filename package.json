@@ -1,36 +1,41 @@
 {
 	"name": "fgs",
-	"version": "0.0.6",
+	"version": "0.1.0",
 	"bin": "bin/cli.js",
 	"files": [
 		"bin"
 	],
 	"scripts": {
-		"build": "esbuild cli.ts --banner:js=\"#!/usr/bin/env node\" --format=cjs --platform=node --target=node12 --outdir=bin",
-		"format": "prettier  --write --list-different \"{*,example/**/*,.github/**/*}.+(ts|json|yml|md)\"",
+		"build": "esbuild src/cli.ts --analyze --format=cjs --platform=node --target=node14 --outdir=bin",
+		"format": "prettier  --write --list-different \"{*,src/**/*,.github/**/*}.+(ts|json|yml|md)\"",
 		"prepublishOnly": "pnpm run build",
 		"typecheck": "tsc --noEmit",
 		"watch": "pnpm run build -- --watch"
 	},
+	"exports": {
+		"./package.json": "./package.json"
+	},
 	"dependencies": {
-		"diary": "^0.3.0",
 		"graphql-config": "^4.1.0",
 		"httpie": "^1.1.2",
 		"kleur": "^4.1.4",
-		"mri": "^1.2.0",
+		"sade": "^1.8.1",
 		"swrt": "^0.0.6"
 	},
 	"devDependencies": {
 		"@marais/tsconfig": "^0.0.2",
-		"esbuild": "^0.14.11",
-		"graphql": "^16.2.0",
-		"prettier": "^2.5.1",
-		"typescript": "^4.5.4"
+		"esbuild": "^0.14.32",
+		"graphql": "^16.3.0",
+		"prettier": "^2.6.2",
+		"typescript": "^4.6.3"
 	},
 	"peerDependencies": {
 		"graphql": ">= 15"
 	},
+	"engines": {
+		"node": ">=14"
+	},
 	"volta": {
-		"node": "16.0.0"
+		"node": "14.19.1"
 	}
 }

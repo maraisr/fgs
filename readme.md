@@ -2,24 +2,16 @@
 
 > `fgs` _or_ **F**etch **G**raphQL **S**chema is a small utility cli to perform an introspection query against a [graphql-config](https://graphql-config.com/) configuration.
 
----
-
-<p align="center"><strong>WORK IN PROGRESS</strong></p>
-
-<p align="center"><strong>Status:</strong> Functional, but incomplete.</p>
-
----
-
 ## 💡 Features
 
--   Fast
 -   graphql-config multi-project integration
 -   relay (rust) aware
+-   json/sdl output
 
 ## ⚙️ Install
 
 ```sh
-yarn add fgs
+npm install fgs
 ```
 
 ## 🚀 Usage
@@ -30,6 +22,9 @@ $ fgs
 
 # fetch schema for endpoint `my-env`
 $ fgs --endpoint my-env
+
+# fetch schema into sdl as json
+$ fgs --json
 ```
 
 ## License
