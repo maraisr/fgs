@@ -51,9 +51,10 @@ const disdover_projects = async (source: string, config_name: string) => {
 
 export default (prog: Sade) => {
     prog
-        .command('relay <target>', "Build and construct relay.json")
+        .command('relay', "Build and construct relay.json")
+        .option('--target', "The path to the target relay.json file", "relay.json")
         .option('--base', "The path to the target relay.json file", "relay.base.json")
-        .action(async (target, { base }) => {
+        .action(async ({ base, target }) => {
             const cwd = process.cwd();
 
             const config = JSON.parse(await fs.readFile(path.resolve(cwd, base), 'utf8'));
