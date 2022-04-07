@@ -101,7 +101,7 @@ async function schema_handler(options: { json: boolean; endpoint: string }) {
 const prog = sade(name, true);
 
 prog.describe(
-	"fetches a graphql schema based on configuration from a graphlconfig file"
+	"fetches a graphql schema based on configuration from graphql-config files"
 )
 	.version(version)
 	.example("-e dev # fetches the development defined in `extensions.dev`");
