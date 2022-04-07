@@ -13,14 +13,26 @@ const { version, name } = require("fgs/package.json");
 // ~> schema_handler
 // TODO: Until bundt@next — lets inline this
 
+const headers_map = (headers: Record<string, string>) => {
+	const returns = new Map();
+	if (headers != undefined)
+		for (let head_key of Object.keys(headers))
+			returns.set(head_key.toLowerCase(), headers[head_key]);
+	return returns;
+};
+
 interface Endpoint {
 	url: string;
 	headers: Record<string, string>;
 }
 
 async function call_graphql(endpoint: Endpoint, query: string) {
+	const headers = headers_map(endpoint.headers);
+	if (!headers.has("content-type"))
+		headers.set("content-type", "application/graphql+json");
+
 	let { data } = await post(endpoint.url, {
-		headers: endpoint.headers,
+		headers: Object.fromEntries(headers),
 		body: JSON.stringify({
 			query: query,
 		}),
