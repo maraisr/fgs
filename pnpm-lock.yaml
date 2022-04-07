@@ -1,19 +1,19 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@marais/tsconfig': ^0.0.2
-  esbuild: ^0.14.32
-  graphql: ^16.3.0
-  graphql-config: ^4.1.0
+  '@marais/tsconfig': 0.0.2
+  esbuild: 0.14.32
+  graphql: 16.3.0
+  graphql-config: ^4.3.0
   httpie: ^1.1.2
   kleur: ^4.1.4
-  prettier: ^2.6.2
+  prettier: 2.6.2
   sade: ^1.8.1
   swrt: ^0.0.6
-  typescript: ^4.6.3
+  typescript: 4.6.3
 
 dependencies:
-  graphql-config: 4.1.0_graphql@16.3.0+typescript@4.6.3
+  graphql-config: 4.3.0_graphql@16.3.0+typescript@4.6.3
   httpie: 1.1.2
   kleur: 4.1.4
   sade: 1.8.1
@@ -702,8 +702,8 @@ packages:
       slash: 3.0.0
     dev: false
 
-  /graphql-config/4.1.0_graphql@16.3.0+typescript@4.6.3:
-    resolution: {integrity: sha512-Myqay6pmdcmX3KqoH+bMbeKZ1cTODpHS2CxF1ZzNnfTE+YUpGTcp01bOw6LpzamRb0T/WTYtGFbZeXGo9Hab2Q==}
+  /graphql-config/4.3.0_graphql@16.3.0+typescript@4.6.3:
+    resolution: {integrity: sha512-Uiu3X7+s5c056WyrvdZVz2vG1fhAipMlYmtiCU/4Z2mX79OXDr1SqIon2MprC/pExIWJfAQZCcjYDY76fPBUQg==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -718,7 +718,7 @@ packages:
       cosmiconfig: 7.0.1
       cosmiconfig-toml-loader: 1.0.0
       graphql: 16.3.0
-      minimatch: 3.0.4
+      minimatch: 4.2.1
       string-env-interpolation: 1.0.1
     transitivePeerDependencies:
       - '@types/node'
@@ -868,8 +868,9 @@ packages:
       picomatch: 2.3.1
     dev: false
 
-  /minimatch/3.0.4:
-    resolution: {integrity: sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==}
+  /minimatch/4.2.1:
+    resolution: {integrity: sha512-9Uq1ChtSZO+Mxa/CL1eGizn2vRn3MlLgzhT0Iz8zaY8NdvxvB0d5QdPFmCKf7JKA9Lerx5vRrnwO03jsSfGG9g==}
+    engines: {node: '>=10'}
     dependencies:
       brace-expansion: 1.1.11
     dev: false
