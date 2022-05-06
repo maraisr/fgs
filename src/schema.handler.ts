@@ -1,17 +1,9 @@
-#!/usr/bin/env node
-
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { loadConfigSync } from "graphql-config";
 import { post } from "httpie";
 import { cyan, green, magenta } from "kleur/colors";
 
-import sade from "sade";
 import { writeFile } from "swrt";
-
-const { version, name } = require("fgs/package.json");
-
-// ~> schema_handler
-// TODO: Until bundt@next — lets inline this
 
 const headers_map = (headers: Record<string, string>) => {
 	const returns = new Map();
@@ -46,7 +38,7 @@ async function call_graphql(endpoint: Endpoint, query: string) {
 	return data.data;
 }
 
-async function schema_handler(options: { json: boolean; endpoint: string }) {
+export async function handler(options: { json: boolean; endpoint: string }) {
 	const introspection_query = getIntrospectionQuery();
 
 	const config = loadConfigSync({
@@ -106,30 +98,4 @@ async function schema_handler(options: { json: boolean; endpoint: string }) {
 			endpoint.url
 		);
 	}
-}
-
-// ~> cli runtime
-
-const prog = sade(name, true);
-
-prog.describe(
-	"fetches a graphql schema based on configuration from graphql-config files"
-)
-	.version(version)
-	.example("-e dev # fetches the development defined in `extensions.dev`");
-
-prog
-	//.command('schema')
-	.option("-e, --endpoint", "the endpoint to use", "next")
-	.option("--json", "output the schema as json", false)
-	.action(schema_handler);
-
-const result = prog.parse(process.argv);
-
-// @ts-ignore
-if ("then" in result) {
-	(result as unknown as Promise<never>).catch((e) => {
-		console.error(e);
-		process.exit(1);
-	});
 }

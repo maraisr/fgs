@@ -8,6 +8,6 @@
 		"removeComments": false,
 		"lib": ["ESNext"]
 	},
-	"files": ["src/cli.ts"],
+	"include": ["src"],
 	"exclude": ["node_modules"]
 }

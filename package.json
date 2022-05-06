@@ -2,11 +2,8 @@
 	"name": "fgs",
 	"version": "0.1.2",
 	"bin": "bin/cli.js",
-	"files": [
-		"bin"
-	],
 	"scripts": {
-		"build": "esbuild src/cli.ts --analyze --format=cjs --platform=node --target=node14 --outdir=bin",
+		"build": "bundt",
 		"format": "prettier  --write --list-different \"{*,src/**/*,.github/**/*}.+(ts|json|yml|md)\"",
 		"prepublishOnly": "pnpm run build",
 		"typecheck": "tsc --noEmit",
@@ -23,11 +20,12 @@
 		"swrt": "^0.0.6"
 	},
 	"devDependencies": {
-		"@marais/tsconfig": "0.0.2",
-		"esbuild": "0.14.32",
-		"graphql": "16.3.0",
+		"@marais/tsconfig": "0.0.3",
+		"@types/node": "17.0.31",
+		"bundt": "2.0.0-next.3",
+		"graphql": "16.4.0",
 		"prettier": "2.6.2",
-		"typescript": "4.6.3"
+		"typescript": "4.6.4"
 	},
 	"peerDependencies": {
 		"graphql": ">= 15"
